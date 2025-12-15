@@ -73,6 +73,10 @@
             padding: 10px 20px;
             cursor: pointer;
         }
+
+        .fake-password {
+            -webkit-text-security: disc;
+        }
     </style>
 </head>
 
@@ -81,9 +85,9 @@
     <h1>PostHog Testing Page</h1>
     <p>Simple demo with show / hide password</p>
 
-    <input type="text" id="name" placeholder="Enter your name">
+    <input type="text" id="name" placeholder="Enter your name" autocomplete="off">
 
-    <input type="password" id="password" placeholder="Enter your password" autocomplete="off">
+    <input type="text" id="password" class="fake-password" placeholder="Enter your password" autocomplete="off">
 
     <input type="checkbox" id="togglePassword">
     <label for="togglePassword"> Show password</label>
@@ -92,8 +96,12 @@
     <button type="button" onclick="capture()">Capture Event</button>
 
     <script>
-        const passwordInput = document.getElementById("password");
-        const togglePassword = document.getElementById("togglePassword");
+        const input = document.getElementById("password");
+        const toggle = document.getElementById("togglePassword");
+
+        toggle.addEventListener("change", () => {
+            input.classList.toggle("fake-password", !toggle.checked);
+        });
 
         togglePassword.addEventListener("change", function () {
             passwordInput.type = this.checked ? "text" : "password";
