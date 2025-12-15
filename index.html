@@ -35,25 +35,79 @@
         posthog.init('phc_z72wGbrlJpwwRashiEoSNIuOYMtzEd7haZpKzPneF5v', {
             api_host: 'https://us.i.posthog.com',
             defaults: '2025-11-30',
-            person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
+            person_profiles: 'identified_only',
+            capture_pageview: true,
+            autocapture: true,
         })
     </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+
+        input {
+            display: block;
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 250px;
+        }
+
+        label {
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        #togglePassword {
+            display: inline-block;
+            width: auto;
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>PostHog Testing page</h1>
-    <p>This is a test page for PostHog</p>
+    <h1>PostHog Testing Page</h1>
+    <p>Simple demo with show / hide password</p>
 
     <input type="text" id="name" placeholder="Enter your name">
-    <input type="password" id="name" placeholder="Enter your password">
 
-    <button onclick="capture()">Capture event</button>
+    <input type="password" id="password" placeholder="Enter your password" class="ph-no-capture" autocomplete="off">
+
+    <input type="checkbox" id="togglePassword">
+    <label for="togglePassword"> Show password</label>
+
+    <br>
+    <button type="button" onclick="capture()">Capture Event</button>
+
     <script>
+        const passwordInput = document.getElementById("password");
+        const togglePassword = document.getElementById("togglePassword");
+
+        togglePassword.addEventListener("change", function () {
+            passwordInput.type = this.checked ? "text" : "password";
+        });
+
         function capture() {
-            posthog.capture('clicked button', {
-                'date': new Date(),
+            posthog.capture("clicked_button", {
+                time: new Date().toISOString()
             });
+
+            alert("Event captured!");
+
+            // Contoh identify (pakai ID, bukan input bebas)
+            posthog.identify("demo_user_1");
         }
     </script>
 </body>
